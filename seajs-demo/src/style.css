@@ -25,25 +25,23 @@ button {
 }
 
 section {
-    width: 1000px;
+    width: 1100px;
     margin: 0 auto;
 }
 
 header {
-    padding: 10px;
+    padding: 10px 0;
 }
 
 header form {
     display: inline-block;
 }
 
-.input1 {
-    width: 100px;
-}
 
-.btn {
-    padding: 0 5px;
-}
+
+/*.btn {*/
+    /*padding: 0 5px;*/
+/*}*/
 
 .btn1 {
     float: right;
@@ -62,7 +60,11 @@ header form {
     height: 550px;
     margin-right: 10px;
     padding: 5px;
-    border: 1px solid #000;
+    border: 1px solid #ddd;
+    -webkit-border-radius:4px 4px 0 0;
+    -moz-border-radius:4px 4px 0 0;
+    border-radius:4px 4px 0 0;
+    /*color:#959595;*/
     /*水平滚动条*/
     position:absolute;
     overflow:auto;
@@ -71,7 +73,7 @@ header form {
 
 .wrap .item {
     padding: 5px 0;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #ddd;
 }
 
 .wrap .item-header {
@@ -79,7 +81,7 @@ header form {
 }
 .wrap .item-title{
     float: left;
-    width:290px;
+    width:270px;
 }
 /*.wrap .item-body img {*/
     /*display: block;*/
@@ -100,78 +102,16 @@ header form {
 }
 
 #container {
-    width: 620px;
+    width: 720px;
     height: 100%;
     margin-left: 380px;
 }
-
-#bg {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #000;
-    z-index: 1001;
-    -moz-opacity: 0.9;
-    opacity: .90;
-    filter: alpha(opacity=90);
+.modal-item{
+    margin-bottom:5px;
 }
-
-#show {
-    display: none;
-    position: absolute;
-    top: 25%;
-    left: 22%;
-    width: 53%;
-    //height: 49%;
-    padding: 8px;
-    border: 8px solid #E8E9F7;
-    background-color: white;
-    z-index: 1002;
-    overflow: auto;
-    font-size:12px;
-}
-
-/*quit弹出层*/
-.quit{
-    float: right;
-    font-size:14px;
-    outline:none;
-    background: #fff;
-    border:none;
-    cursor: pointer;
-}
-.show-header h3{
-    float: left;
-}
-
-.show-body{
-    min-height:50px;
-}
-.show-body input{
-    width:70%;
-}
-.show-body>div{
-    margin-bottom:10px;
-}
-.show-body .location input{
-    width:100px;
-}
-.show-body .modify,.cancel,.preservation{
+.modify, .cancel, .preservation, .pos-btn{
     float: right;
     margin-left:5px;
-    //color:#fff;
-}
-/*.*/
-/*background: cornflowerblue;*/
-.show-footer{
-    text-align: center;
-}
-.show-footer .btn-tj{
-    padding:3px 10px;
-    font-size:16px;
 }
 .hidden{
     display: none;

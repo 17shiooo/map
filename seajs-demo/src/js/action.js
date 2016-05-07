@@ -286,7 +286,7 @@ define(function (require) {
                 backdrop: true,
                 keyboard: true
             });
-            var id = parseFloat($(this).attr('id'));
+            var id = parseFloat($(this).attr('id')) -1; //sbsbsbsbsbsbsbsbsb!!!
             var addressName = $(this).siblings('p').find('.address-name').html();
             var addr = $(this).parent('.item-header').siblings('.item-body').find('.addr').html();
             $('#addressName').val(addressName);
@@ -301,7 +301,6 @@ define(function (require) {
                 maps.map.setZoomAndCenter(14, [$('#addressLon').html(), $('#addressLat').html()]);
                 currentMark.setDraggable(true);
                 //点标记拖拽
-                console.log(currentMark)
                 AMap.event.addListener(currentMark, 'dragend', function (e) {
 
                     $('#myConfirm').modal();

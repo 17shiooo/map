@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!--<link rel="stylesheet" href="src/bootstrap-3.3.5-dist/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="src/style.css">
+    <script>
+
+    </script>
+</head>
+<body>
+<section>
+    <header>
+        <form action="">
+            <select id="provice"></select>
+            <select id="city"></select>
+            <select id="distinct"></select>
+            <label for="number">编号：</label>
+            <input type="text" id="number" class="input1">
+            <label for="keyword">名称：</label>
+            <input type="text" id="keyword" class="input1">
+            <button type="button" class="btn" id="search">查询</button>
+        </form>
+        <span id="location"></span>
+        <button type="button" class="btn btn1">新增停车场</button>
+    </header>
+    <div class="wrap">
+        <div class="lside" style="">
+            <ul id="item-list">
+                <li>这里是查询结果</li>
+            </ul>
+        </div>
+        <div class="rside">
+            <div id="container"></div>
+            <div id="panel"></div>
+            <button type="button" class="btn btn-preserve hidden" id="dragger-btn">保存</button>
+        </div>
+
+    </div>
+    <!--弹出层-->
+    <div id="bg">
+        <div id="show">
+            <div class="show-header clearfix">
+                <h3>编辑</h3>
+                <input id="btnclose" type="button" value="x" class="quit" onclick="hideDiv()"/>
+            </div>
+            <div class="show-body">
+                <div>
+                    <label for="addressName">名称：</label>
+                    <input type="text" id="addressName" disabled="true">
+                    <button type="button" class="btn modify">修改</button>
+                    <button type="button" class="btn cancel hidden">取消</button>
+                    <button type="button" class="btn preservation hidden">保存</button>
+                </div>
+                <div>
+                    <label for="address">地址：</label>
+                    <input type="text" id="address" disabled="true">
+                    <button type="button" class="btn modify">修改</button>
+                    <button type="button" class="btn cancel hidden">取消</button>
+                    <button type="button" class="btn preservation hidden">保存</button>
+                </div>
+                <div class="location">
+                    <label>位置：</label>
+                    经度：<input type="text" id="addressLon" disabled="true">,
+                    纬度：<input type="text" id="addressLat" disabled="true">
+                    <button type="button" class="btn modify pos-btn">修改</button>
+                    <button type="button" class="btn cancel hidden">取消</button>
+                    <button type="button" class="btn preservation hidden">保存</button>
+                </div>
+
+            </div>
+            <div class="show-footer">
+                <!--<button type="button" class="btn" onclick="hideDiv()">取消</button>-->
+                <button type="button" class="btn btn-tj">提交</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="src/js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=ebe8e4078d079ff51cd3a89a1884e245"></script>
+<script src="src/js/map.js"></script>
+<script src="src/js/normal.js"></script>
+
+
+</body>
+</html>
+
+
+
+

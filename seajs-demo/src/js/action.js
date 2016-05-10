@@ -8,243 +8,88 @@ define(function (require) {
 
 
     var markers = [];
+    var _markers = [];
+    var coordinates = {//经纬度
+        setCoordinates: function (lon, lat, uid) {
+            this.lon = lon;
+            this.lat = lat;
+            this.uid = uid;
+        },
+        get lonLat() {
+            return [this.lon, this.lat];
+        },
+        get uId() {
+            return this.uid;
+        }
+    };
+    var Page = {
+        setPage:function(currentPage ){
+            this.currentPage = currentPage;
+        },
+        setInfo:function(ajaxInfo){
+            this.ajaxInfo = ajaxInfo;
+        },
+        get pages(){
+            var allPages = Math.floor(this.ajaxInfo.length /10)+1;
+            return [this.currentPage,allPages];
+        },
+        get info(){
+            return this.ajaxInfo;
+        }
+    };
     //查询
     $('#search').click(function () {
         markers = [];//清除点标记
-        var data = {};
-        var region = $('#provice option:selected').html() + $('#city option:selected').html();
-        if ($('#keyword').val() == '') {
-            data = {
-                'region': region,
-                'uu_id': '13256464sdf465465sd'
+        var data = {
+            'province': $('#provice option:selected').html(),
+            'city': $('#city option:selected').html(),
+            //'district': $('#district option:selected').html();
+            'name': '停车场'
+        };
+
+        $.ajax({
+            //url: 'http://peach-t.uucin.com/apollo/poi/v2/search/',
+            url: 'http://192.168.6.95:9001/park_info/get_by_info',
+            data: data,
+            method: 'GET',
+            success: function (msg) {
+                var data = JSON.parse(msg)[0];
+                var results = data['data'];
+                Page.setPage(1);
+                Page.setInfo(results);
+                console.log(Page.pages);
+                if (data['status'] == 'OK') {
+                    var showResults = results.slice(0, 10);
+                    showData(showResults);
+                } else {
+                    alert('查询有误！');
+                }
+            },
+            error: function (msg) {
+                console.log(msg)
             }
-        } else {
-            data = {
-                'region': region,
-                'keyword': $('#keyword').val(),
-                'uu_id': '13256464sdf465465sd'
-            }
-        }
-        //模拟数据
-        var msg = {
-            "total": 18888,
-            "results": [{
-                "uid": 18651938,
-                "name": "怀柔区",
-                "location": {"lat": "40.316304", "lon": "116.631979"},
-                "category": 49030,
-                "province": "北京市",
-                "city": "",
-                "district": "怀柔区",
-                "address": "",
-                "telephone": [],
-                "park_info": {},
-                "shop_info": {},
-                "hotel_info": {},
-                "movie_info": {},
-                "scenic_info": {},
-                "child_count": 0,
-                "park_flag": 0
-            }, {
-                "uid": 18560702,
-                "name": "碾子乡",
-                "location": {"lat": "40.80644", "lon": "116.49796"},
-                "category": 49031,
-                "province": "北京市",
-                "city": "",
-                "district": "怀柔区",
-                "address": "",
-                "telephone": [],
-                "park_info": {},
-                "shop_info": {},
-                "hotel_info": {},
-                "movie_info": {},
-                "scenic_info": {},
-                "child_count": 0,
-                "park_flag": 0
-            }, {
-                "uid": 18648596,
-                "name": "庙城镇",
-                "location": {"lat": "40.292615", "lon": "116.635051"},
-                "category": 49031,
-                "province": "北京市",
-                "city": "",
-                "district": "怀柔区",
-                "address": "",
-                "telephone": [],
-                "park_info": {},
-                "shop_info": {},
-                "hotel_info": {},
-                "movie_info": {},
-                "scenic_info": {},
-                "child_count": 0,
-                "park_flag": 0
-            }, {
-                "uid": 18619826,
-                "name": "九渡河镇",
-                "location": {"lat": "40.361797", "lon": "116.46985"},
-                "category": 49031,
-                "province": "北京市",
-                "city": "",
-                "district": "怀柔区",
-                "address": "",
-                "telephone": [],
-                "park_info": {},
-                "shop_info": {},
-                "hotel_info": {},
-                "movie_info": {},
-                "scenic_info": {},
-                "child_count": 0,
-                "park_flag": 0
-            }, {
-                "uid": 18648597,
-                "name": "杨宋镇",
-                "location": {"lat": "40.295659", "lon": "116.685195"},
-                "category": 49031,
-                "province": "北京市",
-                "city": "",
-                "district": "怀柔区",
-                "address": "",
-                "telephone": [],
-                "park_info": {},
-                "shop_info": {},
-                "hotel_info": {},
-                "movie_info": {},
-                "scenic_info": {},
-                "child_count": 0,
-                "park_flag": 0
-            }, {
-                "uid": 18644951,
-                "name": "桥梓镇",
-                "location": {"lat": "40.290497", "lon": "116.574067"},
-                "category": 49031,
-                "province": "北京市",
-                "city": "",
-                "district": "怀柔区",
-                "address": "",
-                "telephone": [],
-                "park_info": {},
-                "shop_info": {},
-                "hotel_info": {},
-                "movie_info": {},
-                "scenic_info": {},
-                "child_count": 0,
-                "park_flag": 0
-            }, {
-                "uid": 18571967,
-                "name": "宝山寺乡",
-                "location": {"lat": "40.697442", "lon": "116.573768"},
-                "category": 49031,
-                "province": "北京市",
-                "city": "",
-                "district": "怀柔区",
-                "address": "",
-                "telephone": [],
-                "park_info": {},
-                "shop_info": {},
-                "hotel_info": {},
-                "movie_info": {},
-                "scenic_info": {},
-                "child_count": 0,
-                "park_flag": 0
-            }, {
-                "uid": 18648595,
-                "name": "怀柔镇",
-                "location": {"lat": "40.302199", "lon": "116.640608"},
-                "category": 49031,
-                "province": "北京市",
-                "city": "",
-                "district": "怀柔区",
-                "address": "",
-                "telephone": [],
-                "park_info": {},
-                "shop_info": {},
-                "hotel_info": {},
-                "movie_info": {},
-                "scenic_info": {},
-                "child_count": 0,
-                "park_flag": 0
-            }, {
-                "uid": 18619825,
-                "name": "渤海镇",
-                "location": {"lat": "40.41531", "lon": "116.467207"},
-                "category": 49031,
-                "province": "北京市",
-                "city": "",
-                "district": "怀柔区",
-                "address": "",
-                "telephone": [],
-                "park_info": {},
-                "shop_info": {},
-                "hotel_info": {},
-                "movie_info": {},
-                "scenic_info": {},
-                "child_count": 0,
-                "park_flag": 0
-            }, {
-                "uid": 18621626,
-                "name": "怀北镇",
-                "location": {"lat": "40.388951", "lon": "116.68931"},
-                "category": 49031,
-                "province": "北京市",
-                "city": "",
-                "district": "怀柔区",
-                "address": "",
-                "telephone": [],
-                "park_info": {},
-                "shop_info": {},
-                "hotel_info": {},
-                "movie_info": {},
-                "scenic_info": {},
-                "child_count": 0,
-                "park_flag": 0
-            }]
-        }
-        var results = msg.results;
-        showData(results);
-        //$.ajax({
-        //    url: 'http://peach.uucin.com/apollo/poi/v2/search/',
-        //    data: data,
-        //    method: 'GET',
-        //    success: function (msg) {
-        //        var results = msg.results;
-        //        showData(results);
-        //    },
-        //    error: function (msg) {
-        //        console.log(msg)
-        //    }
-        //});
+        });
     });
+
+    //var currentPage = 0;
     function showData(result) {
         maps.map.clearMap();
         $('#item-list').html('');
-        var i = 1;
-        result.forEach(function (data, i) {
-            i++;
-            var li = $('<li class=\"item\">' +
-                '<div class=\"clearfix item-header\">' +
-                '<p class="item-title">' + i + '、' + '<span class="address-name">' + data['name'] + '</span></p>' +
-                '<button class=\'btn btn1 btn-default btn-edit\' id=' + i + ' data-lon=' + data['location']['lon'] + ' data-lat=' + data['location']['lat'] + '>编辑</button>' +
-                '</div>' +
-                '<div class=\"item-body\">' +
-                '<p class="addr">' + data['address'] + '</p>' +
-                '<div class=\"img-wrap\">' +
-                '<img src=\"\" alt="">' +
-                '</div>' +
-                '<p>坐标:' + data['location']['lon'] + ' , ' + data['location']['lat'] + '</p>' +
-                '<p>数据来源：</p>' +
-                '</div>' +
-                '</li>');
-            $('#item-list').append(li);
-            //markers.push(data);
+        ajaxUl(result,0);
+
+        //li click
+        $('.item').click(function () {
+            var lon = $(this).find('.btn-edit').attr('data-lon');
+            var lat = $(this).find('.btn-edit').attr('data-lat');
+            maps.map.setZoomAndCenter(17, [lon, lat]);
         });
         //点标记
-        var _markers = [];
+
         result.forEach(function (mark, index) {
             _mark = new AMap.Marker({
                 map: maps.map,
                 icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b' + (index + 1) + '.png',
-                position: [mark.location['lon'], mark.location['lat']],
+                position: [mark.lon, mark.lat],
                 offset: new AMap.Pixel(-12, -36),
                 draggable: false
             });
@@ -254,64 +99,38 @@ define(function (require) {
             //点标记的点击事件
             AMap.event.addListener(_mark, 'click', function () {
                 var that = this;
-                $('#myModal').modal();
-                $('#addressName').val(that._uu_data.name);
-                $('#address').val(that._uu_data.address);
-                $('#addressLon').html(that._uu_data.location.lon);
-                $('#addressLat').html(that._uu_data.location.lat);
+                coordinates.setCoordinates(that._uu_data.lon, that._uu_data.lat, that._uu_data.id);
+                showForm(that._uu_data.name, that._uu_data.address);
                 modalBtn();
-                //修改经纬度
-                $('.pos-btn').click(function () {
-                    $('#myModal').modal('hide');
-                    maps.map.setZoomAndCenter(14, [that._uu_data.location.lon, that._uu_data.location.lat]);
-                    that.setDraggable(true);
-                    //AMap.event.removeListener(_m);记得删除点击事件
-                    //点标记拖拽
-                    AMap.event.addListener(that, 'dragend', function (e) {
-                        console.log(that)
-                        $('#myConfirm').modal();
-                        var lnglatX = e.lnglat.getLng();
-                        var lnglatY = e.lnglat.getLat();
-                        $('#currentLon').html(lnglatX);
-                        $('#currentLat').html(lnglatY);
-                        confirm(lnglatX, lnglatY);
-                    });
-                });
+                revise(that);
+                commitForm();
             });
         });
 
         //左侧列表编辑按钮
         $('.btn-edit').click(function () {
-            $('#myModal').modal({
-                backdrop: true,
-                keyboard: true
-            });
-            var id = parseFloat($(this).attr('id')) -1; //sbsbsbsbsbsbsbsbsb!!!
+            coordinates.setCoordinates($(this).attr('data-lon'), $(this).attr('data-lat'), $(this).attr('data-uid'));
+            var id = parseFloat($(this).attr('id')) - 1; //sbsbsbsbsbsbsbsbsb!!!
             var addressName = $(this).siblings('p').find('.address-name').html();
             var addr = $(this).parent('.item-header').siblings('.item-body').find('.addr').html();
-            $('#addressName').val(addressName);
-            $('#address').val(addr);
-            $('#addressLon').html($(this).attr('data-lon'));
-            $('#addressLat').html($(this).attr('data-lat'));
-            $('.cancel').addClass('hidden').siblings('.preservation').addClass('hidden').siblings('.modify').removeClass('hidden');
+            showForm(addressName, addr);
             modalBtn();
             var currentMark = _markers[id];
-            $('.pos-btn').click(function(){
-                $('#myModal').modal('hide');
-                maps.map.setZoomAndCenter(14, [$('#addressLon').html(), $('#addressLat').html()]);
-                currentMark.setDraggable(true);
-                //点标记拖拽
-                AMap.event.addListener(currentMark, 'dragend', function (e) {
-
-                    $('#myConfirm').modal();
-                    var lnglatX = e.lnglat.getLng();
-                    var lnglatY = e.lnglat.getLat();
-                    $('#currentLon').html(lnglatX);
-                    $('#currentLat').html(lnglatY);
-                    confirm(lnglatX, lnglatY);
-                });
-            });
+            currentMark.setClickable(false);
+            revise(currentMark);
+            commitForm();
         });
+
+    }
+    pagination();
+
+    //
+    function showForm(addressName, addr) {
+        $('#myModal').modal();
+        $('#addressName').val(addressName);
+        $('#address').val(addr);
+        $('#addressLon').html(coordinates.lonLat[0]);
+        $('#addressLat').html(coordinates.lonLat[1]);
     }
 
     //弹出层按钮行为
@@ -337,6 +156,111 @@ define(function (require) {
             $('#myModal').modal();
             $('#addressLon').html(X);
             $('#addressLat').html(Y);
+        });
+    }
+
+    //提交
+    function commitForm() {
+        $('#commit').click(function () {
+            //此处提交ajax
+            var commitData = {
+                'uid': coordinates.uId,
+                'lon': coordinates.lonLat[0],
+                'lat': coordinates.lonLat[1]
+            };
+            $.ajax({
+                url: 'http://192.168.6.95:9001/park_info/update_by_id',
+                method: 'put',
+                data: commitData,
+                success: function (msg) {
+                    console.log(msg);
+                }
+            });
+            $('#myModal').modal('hide');
+            maps.map.setZoomAndCenter(17, coordinates.lonLat);
+            _markers.forEach(function (m) {
+                m.setClickable(true);
+                m.setDraggable(false);
+            })
+        });
+    }
+
+    //新增停车场
+    $('#btn-added').click(function () {
+        $('#myModal').modal();
+
+    });
+
+    //修改
+    function revise(mark) {
+        $('.pos-btn').click(function () {
+            mark.setDraggable(true);
+            mark.setClickable(false);
+            $('#myModal').modal('hide');
+            maps.map.setZoomAndCenter(17, coordinates.lonLat);
+            draged(mark);
+        });
+    }
+
+    //拖拽
+    function draged(mark) {
+        AMap.event.addListener(mark, 'dragend', function (e) {
+            $('#myConfirm').modal();
+            var lnglatX = e.lnglat.getLng();
+            var lnglatY = e.lnglat.getLat();
+            $('#currentLon').html(lnglatX);
+            $('#currentLat').html(lnglatY);
+            coordinates.setCoordinates(lnglatX, lnglatY, coordinates.uId);
+            confirm(lnglatX, lnglatY);
+        });
+    }
+
+    //分页
+    function pagination() {
+        $('#previous').click(function () {
+            if(Page.pages[0] > 1){
+                Page.setPage(Page.pages[0]-1);
+                result = Page.info.slice((Page.pages[0]-1)*10-1, Page.pages[0]*10-1);
+                $('#item-list').html('');
+                ajaxUl(result,(Page.pages[0]-1)*10);
+            }else{
+                alert('当前是第一页！');
+            }
+
+        });
+        $('#next').click(function () {
+            console.log(Page.pages)
+            if(Page.pages[0]<Page.pages[1]){
+                Page.setPage(Page.pages[0]+1);
+                result = Page.info.slice((Page.pages[0]-1)*10-1, Page.pages[0]*10-1);
+                $('#item-list').html('');
+                ajaxUl(result,(Page.pages[0]-1)*10);
+            }else{
+                alert('当前是最后一页！');
+            }
+        });
+    }
+
+    function ajaxUl(result,firstPage){
+        var i = firstPage;
+        result.forEach(function (data) {
+            i++;
+            var li = $('<li class=\"item\">' +
+                '<div class=\"clearfix item-header\">' +
+                '<p class="item-title">' + i + '、' + '<span class="address-name">' + data['name'] + '</span></p>' +
+                '<button class=\'btn btn1 btn-default btn-edit\' id=' + i + ' data-uid=' + data['id'] + ' data-lon=' + data['lon'] + ' data-lat=' + data['lat'] + '>编辑</button>' +
+                '</div>' +
+                '<div class=\"item-body\">' +
+                '<p class="addr">' + data['address'] + '</p>' +
+                '<div class=\"img-wrap\">' +
+                '<img src=\"\" alt="">' +
+                '</div>' +
+                '<p>更新时间：' + data['updated_time'] + '</p>' +
+                '<p>数据来源：</p>' +
+                '</div>' +
+                '</li>');
+
+            $('#item-list').append(li);
         });
     }
 

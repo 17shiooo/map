@@ -10,6 +10,7 @@ define(function (require) {
     var markers = [];
     var _markers = [];
     var coordinates = {//经纬度
+<<<<<<< HEAD
         setCoordinates: function (lon, lat, uid) {
             this.lon = lon;
             this.lat = lat;
@@ -35,6 +36,14 @@ define(function (require) {
         },
         get info(){
             return this.ajaxInfo;
+=======
+        setCoordinates: function (lon, lat) {
+            this.lon = lon;
+            this.lat = lat;
+        },
+        get lonLat() {
+            return [this.lon, this.lat];
+>>>>>>> af60c16214c264907d6f8a6cc6692a105dbdefce
         }
     };
     //查询
@@ -68,6 +77,7 @@ define(function (require) {
             error: function (msg) {
                 console.log(msg)
             }
+<<<<<<< HEAD
         });
     });
 
@@ -77,11 +87,55 @@ define(function (require) {
         $('#item-list').html('');
         ajaxUl(result,0);
 
+=======
+        }
+
+        $.ajax({
+            url: 'http://peach-t.uucin.com/apollo/poi/v2/search/',
+            data: data,
+            method: 'GET',
+            success: function (msg) {
+                var results = msg.results;
+                showData(results);
+            },
+            error: function (msg) {
+                console.log(msg)
+            }
+        });
+    });
+
+    function showData(result) {
+        maps.map.clearMap();
+        $('#item-list').html('');
+        var i = 1;
+        result.forEach(function (data, i) {
+            i++;
+            var li = $('<li class=\"item\">' +
+                '<div class=\"clearfix item-header\">' +
+                '<p class="item-title">' + i + '、' + '<span class="address-name">' + data['name'] + '</span></p>' +
+                '<button class=\'btn btn1 btn-default btn-edit\' id=' + i + ' data-lon=' + data['location']['lon'] + ' data-lat=' + data['location']['lat'] + '>编辑</button>' +
+                '</div>' +
+                '<div class=\"item-body\">' +
+                '<p class="addr">' + data['address'] + '</p>' +
+                '<div class=\"img-wrap\">' +
+                '<img src=\"\" alt="">' +
+                '</div>' +
+                '<p>坐标:' + data['location']['lon'] + ' , ' + data['location']['lat'] + '</p>' +
+                '<p>数据来源：</p>' +
+                '</div>' +
+                '</li>');
+            $('#item-list').append(li);
+        });
+>>>>>>> af60c16214c264907d6f8a6cc6692a105dbdefce
         //li click
         $('.item').click(function () {
             var lon = $(this).find('.btn-edit').attr('data-lon');
             var lat = $(this).find('.btn-edit').attr('data-lat');
+<<<<<<< HEAD
             maps.map.setZoomAndCenter(17, [lon, lat]);
+=======
+            maps.map.setZoomAndCenter(15, [lon, lat]);
+>>>>>>> af60c16214c264907d6f8a6cc6692a105dbdefce
         });
         //点标记
 
@@ -99,8 +153,13 @@ define(function (require) {
             //点标记的点击事件
             AMap.event.addListener(_mark, 'click', function () {
                 var that = this;
+<<<<<<< HEAD
                 coordinates.setCoordinates(that._uu_data.lon, that._uu_data.lat, that._uu_data.id);
                 showForm(that._uu_data.name, that._uu_data.address);
+=======
+                coordinates.setCoordinates(that._uu_data.location.lon, that._uu_data.location.lat);
+                showForm(that._uu_data.name,that._uu_data.address);
+>>>>>>> af60c16214c264907d6f8a6cc6692a105dbdefce
                 modalBtn();
                 revise(that);
                 commitForm();
@@ -109,11 +168,19 @@ define(function (require) {
 
         //左侧列表编辑按钮
         $('.btn-edit').click(function () {
+<<<<<<< HEAD
             coordinates.setCoordinates($(this).attr('data-lon'), $(this).attr('data-lat'), $(this).attr('data-uid'));
             var id = parseFloat($(this).attr('id')) - 1; //sbsbsbsbsbsbsbsbsb!!!
             var addressName = $(this).siblings('p').find('.address-name').html();
             var addr = $(this).parent('.item-header').siblings('.item-body').find('.addr').html();
             showForm(addressName, addr);
+=======
+            coordinates.setCoordinates($(this).attr('data-lon'), $(this).attr('data-lat'));
+            var id = parseFloat($(this).attr('id')) - 1; //sbsbsbsbsbsbsbsbsb!!!
+            var addressName = $(this).siblings('p').find('.address-name').html();
+            var addr = $(this).parent('.item-header').siblings('.item-body').find('.addr').html();
+            showForm(addressName,addr);
+>>>>>>> af60c16214c264907d6f8a6cc6692a105dbdefce
             modalBtn();
             var currentMark = _markers[id];
             currentMark.setClickable(false);
@@ -122,10 +189,16 @@ define(function (require) {
         });
 
     }
+<<<<<<< HEAD
     pagination();
 
     //
     function showForm(addressName, addr) {
+=======
+
+    //
+    function showForm(addressName,addr){
+>>>>>>> af60c16214c264907d6f8a6cc6692a105dbdefce
         $('#myModal').modal();
         $('#addressName').val(addressName);
         $('#address').val(addr);
@@ -163,6 +236,7 @@ define(function (require) {
     function commitForm() {
         $('#commit').click(function () {
             //此处提交ajax
+<<<<<<< HEAD
             var commitData = {
                 'uid': coordinates.uId,
                 'lon': coordinates.lonLat[0],
@@ -179,6 +253,11 @@ define(function (require) {
             $('#myModal').modal('hide');
             maps.map.setZoomAndCenter(17, coordinates.lonLat);
             _markers.forEach(function (m) {
+=======
+            $('#myModal').modal('hide');
+            maps.map.setZoomAndCenter(15, coordinates.lonLat);
+            _markers.forEach(function(m){
+>>>>>>> af60c16214c264907d6f8a6cc6692a105dbdefce
                 m.setClickable(true);
                 m.setDraggable(false);
             })
@@ -197,7 +276,11 @@ define(function (require) {
             mark.setDraggable(true);
             mark.setClickable(false);
             $('#myModal').modal('hide');
+<<<<<<< HEAD
             maps.map.setZoomAndCenter(17, coordinates.lonLat);
+=======
+            maps.map.setZoomAndCenter(15, coordinates.lonLat);
+>>>>>>> af60c16214c264907d6f8a6cc6692a105dbdefce
             draged(mark);
         });
     }
@@ -210,6 +293,7 @@ define(function (require) {
             var lnglatY = e.lnglat.getLat();
             $('#currentLon').html(lnglatX);
             $('#currentLat').html(lnglatY);
+<<<<<<< HEAD
             coordinates.setCoordinates(lnglatX, lnglatY, coordinates.uId);
             confirm(lnglatX, lnglatY);
         });
@@ -264,6 +348,12 @@ define(function (require) {
         });
     }
 
+=======
+            coordinates.setCoordinates(lnglatX, lnglatY);
+            confirm(lnglatX, lnglatY);
+        });
+    }
+>>>>>>> af60c16214c264907d6f8a6cc6692a105dbdefce
 });
 
 
